@@ -3,6 +3,7 @@ import SearchBar from "@/components/searchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -31,6 +32,10 @@ const search = () => {
       if (searchQuery.trim()) {
         // Trigger the fetch when searchQuery changes
         await loadMovies();
+        if (movies?.[0] && movies?.length > 0) {
+          // Update search count in Appwrite
+          await updateSearchCount(searchQuery, movies[0]);
+        }
       } else {
         // Reset the movies when searchQuery is empty
         reset();
